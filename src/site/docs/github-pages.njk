@@ -1,0 +1,32 @@
+---
+layout: layouts/docs.njk
+---
+<section id="github-pages" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Deploying Rift to GitHub Pages</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">GitHub Pages is a free static hosting service for open source projects and documentation. It serves your static site directly from a GitHub repository branch.</p>
+        <h3 class="text-2xl font-bold mt-8 mb-4">Steps</h3>
+        <ol class="list-decimal list-inside text-gray-300 mb-6">
+            <li>Build your Rift site: <code>npm run build</code></li>
+            <li>Push the contents of <code>dist/</code> to a <code>gh-pages</code> branch (or <code>docs/</code> folder for user/organization sites).</li>
+            <li>In your repository settings, set GitHub Pages to use the <code>gh-pages</code> branch (or <code>docs/</code> folder).</li>
+            <li>Visit your site at <code>https://&lt;username&gt;.github.io/&lt;repo&gt;/</code></li>
+        </ol>
+        <h3 class="text-2xl font-bold mt-8 mb-4">Tips</h3>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li>Ensure <code>404.html</code> is present at the root of <code>dist/</code> for error handling.</li>
+            <li>Use a tool like <code>gh-pages</code> npm package for easy deployment.</li>
+        </ul>
+        <table class="table-auto w-full text-left text-gray-300 mb-6">
+            <thead>
+                <tr><th class="px-4 py-2">Setting</th><th class="px-4 py-2">Value</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="border px-4 py-2">Branch/folder</td><td class="border px-4 py-2"><code>gh-pages</code> or <code>docs/</code></td></tr>
+                <tr><td class="border px-4 py-2">Default domain</td><td class="border px-4 py-2"><code>*.github.io</code></td></tr>
+                <tr><td class="border px-4 py-2">Free HTTPS</td><td class="border px-4 py-2">✅ Yes</td></tr>
+                <tr><td class="border px-4 py-2">Auto redeploys</td><td class="border px-4 py-2">Manual or via GitHub Actions</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
