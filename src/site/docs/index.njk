@@ -1,0 +1,387 @@
+---
+permalink: /docs/
+layout: layouts/docs.njk
+---
+
+<!-- Docs Hero -->
+<section class="bg-zinc-950 text-white py-24">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <h1 class="text-5xl font-bold mb-4">Rift Documentation</h1>
+        <p class="text-gray-400 mb-8">Comprehensive guides and reference for building fast, modern web applications with Rift.</p>
+
+        <!-- Start a project cli command -->
+        <div class="bg-zinc-900 text-green-400 font-mono p-4 rounded-lg text-sm inline-block mb-6 shadow">
+            <span>$ npm create rift@latest</span>
+        </div>
+    </div>
+</section>
+
+<!-- Core Concepts -->
+<section id="core-concepts" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Core Concepts & Features</h2>
+        <div class="space-y-14 text-left">
+            <div>
+                <h3 class="text-2xl font-bold mb-2 mt-8 text-blue-300">Pages & Routing</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">Rift uses a file-based routing system. Each file in your <code class="font-mono text-green-400">src/pages</code> directory becomes a route on your site. You can use <strong>.rift</strong>, <strong>.njk</strong>, or <strong>.md</strong> files for your pages. Dynamic routes and parameters are supported via controller files.</p>
+                <div class="rift-ide mb-6">
+                  <div class="rift-ide-header">
+                    <span class="rift-ide-dot red"></span>
+                    <span class="rift-ide-dot yellow"></span>
+                    <span class="rift-ide-dot green"></span>
+                    <span class="rift-ide-title">src/pages/post.rift</span>
+                  </div>
+                  <div class="rift-ide-body">
+                    <pre class="overflow-x-auto text-sm rounded-none"><code class="language-ts">---
+permalink: /post/:slug
+---
+&lt;h1&gt;{{ title }}&lt;/h1&gt;
+</code></pre>
+                  </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold mb-2 mt-8 text-blue-300">Controllers</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">Controllers are TypeScript files that let you fetch data, define params, and control how pages are rendered. Place them in <code class="font-mono text-green-400">src/controllers</code> and export <code>params()</code> and <code>render()</code> functions. This gives you full control over data and output.</p>
+                <div class="rift-ide mb-6">
+                  <div class="rift-ide-header">
+                    <span class="rift-ide-dot red"></span>
+                    <span class="rift-ide-dot yellow"></span>
+                    <span class="rift-ide-dot green"></span>
+                    <span class="rift-ide-title">src/controllers/posts.controller.ts</span>
+                  </div>
+                  <div class="rift-ide-body">
+                    <pre class="overflow-x-auto text-sm rounded-none"><code class="language-ts">export async function params() {
+  return await getContent('posts/*.md', item => ({
+    ...item.metadata,
+    content: item.content,
+  }));
+}
+</code></pre>
+                  </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold mb-2 mt-8 text-blue-300">Assets</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">Static assets (images, icons, etc.) go in <code class="font-mono text-green-400">src/assets</code>. Rift copies these to your output directory. Reference them in your pages with relative paths.</p>
+                <div class="rift-ide mb-6">
+                  <div class="rift-ide-header">
+                    <span class="rift-ide-dot red"></span>
+                    <span class="rift-ide-dot yellow"></span>
+                    <span class="rift-ide-dot green"></span>
+                  </div>
+                  <div class="rift-ide-body">
+                    <pre class="overflow-x-auto text-sm rounded-none"><code class="language-html">&lt;img src="/assets/logo.png" alt="Logo" /&gt;</code></pre>
+                  </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold mb-2 mt-8 text-blue-300">Plugins</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">Rift is fully extensible via plugins. Use official plugins for Markdown, Nunjucks, i18n, RSS, and more—or write your own. Configure plugins in <code class="font-mono text-green-400">rift.config.ts</code> to customize your build pipeline.</p>
+                <div class="rift-ide mb-6">
+                  <div class="rift-ide-header">
+                    <span class="rift-ide-dot red"></span>
+                    <span class="rift-ide-dot yellow"></span>
+                    <span class="rift-ide-dot green"></span>
+                  </div>
+                  <div class="rift-ide-body">
+                    <pre class="overflow-x-auto text-sm rounded-none"><code class="language-ts">// rift.config.ts
+import { defineConfig } from '@riftjs/rift';
+import { markdownPlugin, njkPlugin } from '@riftjs/plugins';
+
+export default defineConfig({
+  plugins: [markdownPlugin(), njkPlugin()]
+});</code></pre>
+                  </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold mb-2 mt-8 text-blue-300">Frontmatter & Metadata</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">Define page metadata (permalink, date, tags, etc.) using frontmatter at the top of your files. This metadata is available in your templates and controllers.</p>
+                <div class="rift-ide mb-6">
+                  <div class="rift-ide-header">
+                    <span class="rift-ide-dot red"></span>
+                    <span class="rift-ide-dot yellow"></span>
+                    <span class="rift-ide-dot green"></span>
+                  </div>
+                  <div class="rift-ide-body">
+                    <pre class="overflow-x-auto text-sm rounded-none"><code class="language-yaml">--- 
+title: My First Post
+permalink: /post/my-first-post
+date: 2025-05-10
+tags: [rift, static site generator]
+---
+</code></pre>
+                  </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold mb-2 mt-8 text-blue-300">Internationalization (i18n)</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">Rift supports multiple languages out of the box. Store translations in <code class="font-mono text-green-400">src/locales</code> and use the <code>i18nPlugin</code> to localize your content.</p>
+                <div class="rift-ide mb-6">
+                  <div class="rift-ide-header">
+                    <span class="rift-ide-dot red"></span>
+                    <span class="rift-ide-dot yellow"></span>
+                    <span class="rift-ide-dot green"></span>
+                  </div>
+                  <div class="rift-ide-body">
+                    <pre class="overflow-x-auto text-sm rounded-none"><code class="language-json">// src/locales/en.json
+{
+  "hello": "Hello World"
+}</code></pre>
+                  </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold mb-2 mt-8 text-blue-300">Build Output</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">All content is compiled to static HTML in your output directory. No client-side JavaScript is included unless you add it yourself. This ensures fast, SEO-friendly sites by default.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Installation -->
+<section id="installation" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Installation</h2>
+        <div class="space-y-10 text-left">
+            <div>
+                <h3 class="text-2xl font-bold mb-2 mt-8 text-blue-300">1. Create a Project (Recommended)</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">The easiest way to get started is with the official starter. This sets up everything for you, including a sample config, pages, and assets.</p>
+                <div class="rift-ide mb-6">
+                  <div class="rift-ide-header">
+                    <span class="rift-ide-dot red"></span>
+                    <span class="rift-ide-dot yellow"></span>
+                    <span class="rift-ide-dot green"></span>
+                  </div>
+                  <div class="rift-ide-body">
+                    <pre class="overflow-x-auto text-sm rounded-none"><code class="language-bash">npm create rift@latest</code></pre>
+                  </div>
+                </div>
+                <p class="text-gray-400 text-sm mt-2">Follow the prompts to scaffold a new Rift project.</p>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold mb-2 mt-8 text-blue-300">2. Manual Setup (Advanced)</h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">You can also add Rift to an existing project or set up from scratch. Install Rift and create a minimal config file:</p>
+                <div class="rift-ide mb-6">
+                  <div class="rift-ide-header">
+                    <span class="rift-ide-dot red"></span>
+                    <span class="rift-ide-dot yellow"></span>
+                    <span class="rift-ide-dot green"></span>
+                  </div>
+                  <div class="rift-ide-body">
+                    <pre class="overflow-x-auto text-sm rounded-none"><code class="language-bash">npm install @riftjs/rift @riftjs/plugins</code></pre>
+                  </div>
+                </div>
+                <p class="text-gray-400 text-sm mb-2">Then add a <code class="font-mono text-green-400">rift.config.js</code> file to your project root:</p>
+                <div class="rift-ide mb-6">
+                  <div class="rift-ide-header">
+                    <span class="rift-ide-dot red"></span>
+                    <span class="rift-ide-dot yellow"></span>
+                    <span class="rift-ide-dot green"></span>
+                  </div>
+                  <div class="rift-ide-body">
+                    <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// rift.config.js
+module.exports = {
+  plugins: [require('@riftjs/plugins').njkPlugin()]
+};
+</code></pre>
+                  </div>
+                </div>
+                <p class="text-gray-400 text-sm mt-2">You can now add your pages and assets folders and run Rift CLI commands.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Start / Project Structure -->
+<section id="quick-start" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Project Structure</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">A typical Rift project has the following structure:</p>
+        <div class="rift-ide mb-6">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-bash">src/
+  pages/
+  controllers/
+  assets/
+  locales/
+rift.config.js
+</code></pre>
+          </div>
+        </div>
+        <p class="text-gray-400 text-sm mt-2">Organize your content, controllers, and assets as shown above for best results.</p>
+    </div>
+</section>
+
+<!-- CLI Commands -->
+<section id="cli-commands" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">CLI Commands</h2>
+        <div class="rift-ide mb-6">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-bash">npx rift build   # Build your site
+npx rift dev     # Start local dev server
+npx rift clean   # Remove output directory
+</code></pre>
+          </div>
+        </div>
+        <p class="text-gray-400 text-sm mt-2">Use these commands to build, preview, and clean your Rift project.</p>
+    </div>
+</section>
+
+<!-- Configuration -->
+<section id="configuration" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Configuration</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">Configure Rift using <code class="font-mono text-green-400">rift.config.js</code> or <code class="font-mono text-green-400">rift.config.ts</code>. Here is a minimal example:</p>
+        <div class="rift-ide mb-6">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// rift.config.js
+module.exports = {
+  plugins: [require('@riftjs/plugins').njkPlugin()]
+};
+</code></pre>
+          </div>
+        </div>
+        <p class="text-gray-400 text-sm mt-2">See the Plugin Reference for more configuration options.</p>
+    </div>
+</section>
+
+<!-- Pages -->
+<section id="pages" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Pages</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">Pages are created in the <code class="font-mono text-green-400">src/pages</code> directory. Each file becomes a route. Use .rift, .njk, or .md files.</p>
+        <div class="rift-ide mb-6">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">src/pages/about.rift</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-ts">---
+title: About
+---
+&lt;h1&gt;About Rift&lt;/h1&gt;
+</code></pre>
+          </div>
+        </div>
+    </div>
+</section>
+
+<!-- Templating -->
+<section id="templating" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Templating</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">Rift supports Nunjucks, Markdown, and custom templates. Use variables and includes for dynamic content.</p>
+        <div class="rift-ide mb-6">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-njk">&lt;h1&gt;{{ title }}&lt;/h1&gt;
+{% include "partials/footer.njk" %}
+</code></pre>
+          </div>
+        </div>
+    </div>
+</section>
+
+<!-- Assets -->
+<section id="assets" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Assets</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">Place static files in <code class="font-mono text-green-400">src/assets</code>. Reference them in your pages with relative paths.</p>
+        <div class="rift-ide mb-6">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-html">&lt;img src="/assets/logo.png" alt="Logo" /&gt;</code></pre>
+          </div>
+        </div>
+    </div>
+</section>
+
+<!-- Plugins -->
+<section id="plugins" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Plugins</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">Extend Rift with official and custom plugins. Configure them in your config file.</p>
+        <div class="rift-ide mb-6">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// rift.config.js
+module.exports = {
+  plugins: [
+    require('@riftjs/plugins').njkPlugin(),
+    require('@riftjs/plugins').markdownPlugin()
+  ]
+};
+</code></pre>
+          </div>
+        </div>
+    </div>
+</section>
+
+<!-- Plugin API -->
+<section id="plugin-api" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Plugin API</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">Write your own plugins to extend Rift. Plugins are functions that receive the Rift context and can modify the build process.</p>
+        <div class="rift-ide mb-6">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// Example plugin
+module.exports = function myPlugin() {
+  return {
+    name: 'my-plugin',
+    onBuild({ config }) {
+      // Custom logic here
+    }
+  };
+};
+</code></pre>
+          </div>
+        </div>
+    </div>
+</section>
+
+<!-- Support -->
+<section id="donate" class="px-6 py-24 bg-zinc-900 border-t border-zinc-800 text-center">
+    <h2 class="text-3xl font-bold mb-4">Support Rift</h2>
+    <p class="text-gray-400 mb-8">No venture funding. No corporate backing. Just code that works. Help keep it that
+        way.</p>
+    <a href="https://riftjs.dev/sponsor"
+        class="inline-block bg-orange-500 px-6 py-3 rounded text-white font-bold hover:bg-orange-600">Sponsor
+        Rift</a>
+</section>

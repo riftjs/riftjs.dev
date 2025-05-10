@@ -1,0 +1,174 @@
+---
+permalink: /api-reference/frontmatter/
+layout: layouts/api-reference.njk
+---
+
+<section class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h1 id="frontmatter-parameters" class="text-4xl font-bold mb-6">Frontmatter Parameters</h1>
+        <p class="text-gray-300 mb-6">
+            Rift supports <strong>front matter</strong> blocks in <b>all text-based files</b> under <code>/pages</code>.<br>
+            This includes <code>.html</code>, <code>.txt</code>, <code>.css</code>, <code>.json</code>, and more.<br>
+            Use frontmatter to configure metadata and behavior for each page using a special block at the top of the file.<br>
+            <strong>Note:</strong> Custom <code>.page.ts</code> files are an exception—they use a render function instead. <a href="/api-reference/page" class="text-blue-400 underline">Learn more</a>.
+        </p>
+
+        <h2 id="frontmatter-example" class="text-2xl font-bold mt-10 mb-4">🧩 What is front matter in Rift?</h2>
+        <p class="text-gray-300 mb-6">Front matter is a configuration block embedded as an HTML comment at the top of
+            your file. It lets you customize layout, output paths, localization, routing, and more—per page. Unlike
+            other static site generators, Rift uses standard HTML comments, so your files remain valid HTML and
+            previewable anywhere.</p>
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span>
+                <span class="rift-ide-dot yellow"></span>
+                <span class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Frontmatter Example</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre class="overflow-x-auto text-sm rounded-none"><code class="language-yaml">---
+title: My Blog Post
+layout: blog.njk
+permalink: /blog/{{ slug }}
+locale: en
+collection: posts
+tags: [blog, dev]
+slug: my-blog-post
+---
+</code></pre>
+            </div>
+        </div>
+
+        <h2 id="supported-fields" class="text-2xl font-bold mt-10 mb-4">🔧 Supported Fields</h2>
+        <ul class="list-disc ml-8 text-gray-300 mb-8">
+            <li><code class="font-mono text-green-400">title</code> – Sets the document/page title. Available to layouts
+                and templates.</li>
+            <li><code class="font-mono text-green-400">layout</code> – Defines the layout template (e.g.
+                <code>blog.njk</code>). Required for pages that use a layout system.</li>
+            <li><code class="font-mono text-green-400">permalink</code> – Overrides the default URL for the page. Can be
+                a static string or use template variables like <code>{{'{{ slug }}'}}</code>,
+                <code>{{'{{ locale }}'}}</code>, etc.</li>
+            <li><code class="font-mono text-green-400">locale</code> – Optional. Sets the language code for localized
+                content (<code>en</code>, <code>es</code>, <code>de</code>, etc.).</li>
+            <li><code class="font-mono text-green-400">collection</code> – Groups pages into a named collection (e.g.
+                <code>posts</code>).</li>
+            <li><code class="font-mono text-green-400">tags</code> – Optional. List of strings for tagging, filtering,
+                or categorizing content.</li>
+            <li><code class="font-mono text-green-400">slug</code> – Optional. Used as a permalink variable, useful for
+                generating URLs from titles.</li>
+            <li><code class="font-mono text-green-400">(custom)</code> – Any other key/value pairs are passed through
+                and can be accessed in layouts or controllers.</li>
+        </ul>
+
+        <h2 id="permalink-templating" class="text-2xl font-bold mt-10 mb-4">🧠 How permalink templating works</h2>
+        <p class="text-gray-300 mb-6">You can use <code>{{'{{ variable }}'}}</code> syntax in <code>permalink</code> to
+            generate dynamic URLs. These variables are taken from front matter fields.</p>
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span>
+                <span class="rift-ide-dot yellow"></span>
+                <span class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Permalink Example</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre class="overflow-x-auto text-sm rounded-none"><code class="language-html">permalink: /blog/{{'{{ slug }}'}}
+slug: hello-world
+</code></pre>
+            </div>
+        </div>
+        <p class="text-gray-400 mb-6">This generates <code>/blog/hello-world/index.html</code> as the output path.</p>
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span>
+                <span class="rift-ide-dot yellow"></span>
+                <span class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Permalink + Locale Example</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre class="overflow-x-auto text-sm rounded-none"><code class="language-html">permalink: /{{'{{ locale }}'}}/blog/{{'{{ slug }}'}}
+locale: en
+slug: hello-world
+</code></pre>
+            </div>
+        </div>
+        <p class="text-gray-400 mb-6">This generates <code>/en/blog/hello-world/index.html</code> (and similar for other
+            locales).</p>
+
+        <h2 id="collections" class="text-2xl font-bold mt-10 mb-4">📚 What are collections and how do they work?</h2>
+        <p class="text-gray-300 mb-6">Any page with a <code>collection</code> key (e.g. <code>collection: posts</code>)
+            is grouped together. You can use collections in controllers or templates to render lists, create tag
+            archives, or paginate data. Collections can be filtered by tag, locale, date, or any other front matter
+            field.</p>
+
+        <h2 id="parameterized-pages" class="text-2xl font-bold mt-10 mb-4">🔁 Parameterized pages with collections</h2>
+        <p class="text-gray-300 mb-6">If a page uses a collection and a parameterized permalink (e.g.
+            <code>/posts/{{'{{ slug }}'}}</code>), Rift will generate one output page per item in that collection using
+            the data provided in the front matter.</p>
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span>
+                <span class="rift-ide-dot yellow"></span>
+                <span class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Collection Example</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre class="overflow-x-auto text-sm rounded-none"><code class="language-html">permalink: /blog/{{'{{ slug }}'}}
+collection: posts
+layout: blog-post.njk
+</code></pre>
+            </div>
+        </div>
+        <p class="text-gray-400 mb-6">If you have:</p>
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span>
+                <span class="rift-ide-dot yellow"></span>
+                <span class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Content Structure Example</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre class="overflow-x-auto text-sm rounded-none"><code class="language-tree">posts/
+├── post1.en.md <!-- slug: one -->
+└── post2.en.md <!-- slug: two -->
+</code></pre>
+            </div>
+        </div>
+        <p class="text-gray-400 mb-6">Rift will render:</p>
+        <ul class="list-disc ml-8 text-gray-300 mb-8">
+            <li><code>/blog/one/index.html</code></li>
+            <li><code>/blog/two/index.html</code></li>
+        </ul>
+
+        <h2 id="example-full-file" class="text-2xl font-bold mt-10 mb-4">🧪 Example Full File</h2>
+        <p class="text-gray-300 mb-6">Here is a complete example of a <code>.html</code> file using Rift front matter.
+            The front matter block is at the top, and the rest of the file is normal HTML.</p>
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span>
+                <span class="rift-ide-dot yellow"></span>
+                <span class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Example Full File</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre class="overflow-x-auto text-sm rounded-none"><code class="language-html">---
+title: Hello World
+layout: blog.njk
+permalink: /blog/{{'{{ slug }}'}}
+slug: hello-world
+tags: [demo, intro]
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello World</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    <p>This is a demo page using Rift front matter.</p>
+  </body>
+</html>
+</code></pre>
+            </div>
+        </div>
+    </div>
+</section>

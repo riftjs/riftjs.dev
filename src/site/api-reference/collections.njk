@@ -1,0 +1,153 @@
+---
+permalink: /api-reference/collections/
+layout: layouts/api-reference.njk
+---
+
+<section class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+  <div class="max-w-4xl mx-auto px-6">
+    <h1 class="text-4xl font-bold mb-6">Collections</h1>
+
+    <p class="text-gray-300 mb-6">
+      Collections in Rift are powerful groupings of content that let you organize and access related files across your site. They're identified using the <code>collection</code> key in a file's front matter and loaded into <code>context.collections</code> during the build.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">1. Declaring Collections in Content</h2>
+    <p class="text-gray-300 mb-6">
+      Collections are implicit. Any content file with a <code>collection</code> value in its front matter is added to that collection automatically. No manual registration is required.
+    </p>
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Example: Markdown Frontmatter</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-yaml">---
+title: Hello World
+slug: hello
+collection: posts
+locale: en
+tags: [intro, welcome]
+---</code></pre>
+      </div>
+    </div>
+
+    <p class="text-gray-300 mb-6">
+      All files with <code>collection: posts</code> will be available under <code>context.collections.posts</code> as an array of data objects.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">2. Creating a Collection Loader</h2>
+    <p class="text-gray-300 mb-6">
+      You can define custom logic to load, filter, and transform collection content by creating a file like <code>src/collections/posts.collection.ts</code>.
+    </p>
+    <p class="text-gray-300 mb-6">
+      This file should export an async <code>collection({ locale })</code> function and return an array of data items.
+    </p>
+
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Example: File-based Loader</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-ts">import { getContent } from '@riftjs/collection';
+
+export async function collection({ locale }) {
+  return await getContent('posts/*.&#123;&#123;locale&#125;&#125;.md', item => ({
+    ...item.metadata,
+    content: item.content,
+  }));
+}</code></pre>
+      </div>
+    </div>
+
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Example: Remote API Loader</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-ts">export async function collection({ locale }) {
+  const res = await fetch(`https://api.example.com/posts?locale=${locale}`);
+  if (!res.ok) throw new Error('Failed to fetch');
+  return await res.json();
+}</code></pre>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">3. Using Collections in Controllers</h2>
+    <p class="text-gray-300 mb-6">
+      Inside your controller <code>params()</code> function, access any collection using <code>context.collections.name</code>.
+    </p>
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Controller Example</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-ts">export async function params({ collections, param }) {
+    const localized = collections.posts.filter(p => p.locale === locale);
+    for(const post of localized) {
+        param(post);
+    }
+}</code></pre>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">4. Using Collections in Templates</h2>
+    <p class="text-gray-300 mb-6">
+      You can use <code>collections</code> in Nunjucks templates to loop through items and render them.
+    </p>
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Template Loop</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-njk">&#123;% for post in collections.posts %&#125;
+  &lt;h2&gt;&#123;&#123; post.title &#125;&#125;&lt;/h2&gt;
+  &lt;p&gt;&#123;&#123; post.content | safe &#125;&#125;&lt;/p&gt;
+&#123;% endfor %&#125;</code></pre>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">5. Localization</h2>
+    <p class="text-gray-300 mb-6">
+      Rift collections don't auto-group by locale. But you can do it manually in your controller or template logic.
+    </p>
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Looping Localized Content</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-njk">&#123;% for post in collections.posts[locale] %&#125;
+  &lt;h2&gt;&#123;&#123; post.title &#125;&#125;&lt;/h2&gt;
+  &lt;p&gt;&#123;&#123; post.content &#125;&#125;&lt;/p&gt;
+&#123;% endfor %&#125;</code></pre>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">6. Custom Grouping</h2>
+    <p class="text-gray-300 mb-6">
+      You can organize collections by any logic: locale, tags, categories, or custom keys.
+    </p>
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Example: Group by Category</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-njk">&#123;% for category in categories %&#125;
+  &lt;h3&gt;&#123;&#123; category.name &#125;&#125;&lt;/h3&gt;
+  &#123;% for post in category.posts %&#125;
+    &lt;h4&gt;&#123;&#123; post.title &#125;&#125;&lt;/h4&gt;
+  &#123;% endfor %&#125;
+&#123;% endfor %&#125;</code></pre>
+      </div>
+    </div>
+
+    <p class="text-gray-300 mb-6">
+      Rift gives you full control over how content is grouped, localized, paginated, or transformed.
+    </p>
+  </div>
+</section>

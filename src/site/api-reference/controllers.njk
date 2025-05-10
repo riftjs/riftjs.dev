@@ -1,0 +1,104 @@
+---
+permalink: /api-reference/controllers/
+layout: layouts/api-reference.njk
+---
+
+<section class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+  <div class="max-w-4xl mx-auto px-6">
+    <h1 class="text-4xl font-bold mb-6">Controllers</h1>
+
+    <p class="text-gray-300 mb-6">
+      Controllers in Rift define how pages are generated from dynamic data. They let you control what pages are built, what data is passed into them, and how URLs are structured. Controllers are TypeScript files placed under <code>src/controllers/</code>, and can be referenced from front matter using <code>controller: somefile.controller.ts</code>.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">params(ctx)</h2>
+    <p class="text-gray-300 mb-6">
+      This function is responsible for seeding the generator with parameters for each page to be created. Use <code>ctx.param(...)</code> to define as many entries as needed.
+    </p>
+
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Example: Multi-page Generator</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-ts">export async function params(ctx) {
+  ctx.param({ slug: 'hello-world' });
+  ctx.param({ slug: 'goodbye-world' });
+  ctx.param({ slug: 'draft-post' });
+}</code></pre>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">permalink(ctx)</h2>
+    <p class="text-gray-300 mb-6">
+      This function receives each param and locale and must return a string path representing the final URL for that page. You have full control over the permalink structure.
+    </p>
+
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Example: Locale-aware Permalinks</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-ts">export function permalink(ctx) {
+  return `/${ctx.locale}/blog/${ctx.params.slug}`;
+}</code></pre>
+      </div>
+    </div>
+
+    <p class="text-gray-300 mb-6">
+      This will generate URLs like <code>/en/blog/hello-world</code> or <code>/fr/blog/bonjour-le-monde</code> based on locale and slug.
+    </p>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">Combining params() + permalink()</h2>
+    <p class="text-gray-300 mb-6">
+      The real power of controllers comes from combining both functions to produce multiple localized or data-driven pages.
+    </p>
+
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Controller: Generate Blog Pages</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-ts">export async function params(ctx) {
+  const posts = ctx.collections.posts.filter(p => p.locale === ctx.locale);
+  for (const post of posts) {
+    ctx.param({ slug: post.slug });
+  }
+}
+
+export function permalink(ctx) {
+  return `/${ctx.locale}/blog/${ctx.params.slug}`;
+}</code></pre>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">Pagination (Optional)</h2>
+    <p class="text-gray-300 mb-6">
+      Rift includes a pagination helper to split arrays into paginated chunks. Use it in <code>params()</code> when rendering lists of data across multiple pages.
+    </p>
+    <div class="rift-ide mb-6">
+      <div class="rift-ide-header">
+        <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span class="rift-ide-dot green"></span>
+        <span class="rift-ide-title">Example: Paginated Posts</span>
+      </div>
+      <div class="rift-ide-body">
+        <pre><code class="language-ts">import { pagination } from '@riftjs/utils';
+
+export async function params(ctx) {
+  const allPosts = ctx.collections.posts.filter(p => p.locale === ctx.locale);
+  const pages = pagination(allPosts, 5);
+  for (const page of pages) {
+    ctx.param({ page });
+  }
+}</code></pre>
+      </div>
+    </div>
+
+    <p class="text-gray-300">
+      See <a href="/api-reference/pagination" class="text-blue-400 hover:underline">Pagination</a> to learn more about page chunking and navigation helpers.
+    </p>
+  </div>
+</section>

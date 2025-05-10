@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% include "partials/head.njk" %}
+
+<body class="bg-zinc-950 text-white font-sans">
+
+    
+    {% include "partials/code-editor-style.njk" %}
+
+    {% include "partials/navigation.njk" %}
+
+    <!-- content with side nav -->
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <div class="hidden md:block w-1/6 bg-zinc-800">
+            {% include "partials/api-sidebar.njk" %}
+        </div>
+        <div class="w-full md:w-5/6">
+            {{ content | safe }}
+        </div>
+    </div>
+
+    {% include "partials/footer.njk" %}
+</body>
+</html>

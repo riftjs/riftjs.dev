@@ -1,0 +1,271 @@
+---
+permalink: /api-reference/
+layout: layouts/api-reference.njk
+---
+
+
+<!-- API Reference Hero -->
+<section class="bg-zinc-950 text-white py-24">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <h1 class="text-5xl font-bold mb-4">Rift API Reference</h1>
+    <p class="text-gray-400 mb-8">Detailed reference for Rift's core functions, methods, variables, and plugin APIs.</p>
+  </div>
+</section>
+
+<!-- API Reference List -->
+<section id="api-list" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Rift Reference Documentation</h2>
+    <div class="space-y-12 text-left">
+
+      <!-- Frontmatter Parameters -->
+      <div id="frontmatter-parameters">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Frontmatter Parameters</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Explore the metadata fields supported by Rift for content organization and customization.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Frontmatter Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-yaml">---
+layout: post
+permalink: /my-post/
+title: "My Post Title"
+date: 2025-05-10
+tags: ["example", "tutorial"]
+---
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collections -->
+      <div id="collections">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Collections</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Define and manage collections to group and query content effectively.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Collections Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// Define a collection in Rift
+module.exports = {
+  collections: {
+    posts: (content) => content.filter(item => item.type === 'post')
+  }
+};
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controllers -->
+      <div id="controllers">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Controllers</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Controllers allow you to define custom logic for content rendering.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Controller Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// Example of a custom controller
+module.exports = {
+  postsController: (content) => {
+    return content.map(post => ({
+      ...post,
+      summary: post.content.slice(0, 100) // Add a summary field
+    }));
+  }
+};
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div id="pagination">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Pagination</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Learn how to paginate your content for better navigation and user experience.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Pagination Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// Example of pagination logic
+module.exports = {
+  paginate: (items, pageSize) => {
+    const pages = [];
+    for (let i = 0; i < items.length; i += pageSize) {
+      pages.push(items.slice(i, i + pageSize));
+    }
+    return pages;
+  }
+};
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Localization -->
+      <div id="localization">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Localization</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Learn how to localize your content for different languages and regions.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Localization Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// Example of localization configuration
+module.exports = {
+  localization: {
+    defaultLocale: 'en',
+    locales: ['en', 'es', 'fr'],
+    translations: {
+      en: { welcome: 'Welcome' },
+      es: { welcome: 'Bienvenido' },
+      fr: { welcome: 'Bienvenue' }
+    }
+  }
+};
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Context -->
+      <div id="context">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Context</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Understand the context object available in Rift for dynamic content rendering.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Context Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// Accessing context in a controller
+module.exports = {
+  exampleController: (context) => {
+    console.log(context.params); // Access route parameters
+    console.log(context.query);  // Access query parameters
+    return context;
+  }
+};
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div id="content">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Content</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Learn how to manage and query content files in Rift.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Content Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// Querying content files
+const posts = await getContent('posts/*.md', item => ({
+  ...item.metadata,
+  content: item.content
+}));
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Params -->
+      <div id="params">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Params</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Learn how to use route parameters in Rift.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Params Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// Accessing route parameters
+module.exports = {
+  exampleController: (context) => {
+    const { id } = context.params;
+    console.log(`Route parameter: ${id}`);
+    return id;
+  }
+};
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Permalinks -->
+      <div id="permalinks">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Permalinks</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Define custom permalinks for your content in Rift.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Permalinks Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-yaml">---
+layout: post
+permalink: /blog/fuc kyou
+title: "My Blog Post"
+---
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Render Functions -->
+      <div id="custom-render-functions">
+        <h3 class="text-xl font-bold mb-2 text-blue-300">Custom Render Functions</h3>
+        <p class="text-gray-300 mb-3 leading-relaxed">Create custom render functions in controllers for advanced content manipulation.</p>
+        <div class="rift-ide mb-4">
+          <div class="rift-ide-header">
+            <span class="rift-ide-dot red"></span>
+            <span class="rift-ide-dot yellow"></span>
+            <span class="rift-ide-dot green"></span>
+            <span class="rift-ide-title">Custom Render Function Example</span>
+          </div>
+          <div class="rift-ide-body">
+            <pre class="overflow-x-auto text-sm rounded-none"><code class="language-js">// Custom render function in a controller
+module.exports = {
+  customRender: (content) => {
+    return content.map(item => ({
+      ...item,
+      rendered: `<h1>${item.title}</h1>${item.content}`
+    }));
+  }
+};
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
