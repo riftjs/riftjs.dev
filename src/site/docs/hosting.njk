@@ -1,0 +1,98 @@
+---
+permalink: /docs/hosting/
+layout: layouts/docs.njk
+---
+
+
+<!-- Hosting -->
+<section id="hosting" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Hosting Your Rift Site</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">Once your site is built using <code class="font-mono text-green-400">rift build</code>, you're left with a static output directory (<code class="font-mono text-green-400">dist/</code>) containing plain HTML, CSS, JS, and asset files. You can host this folder on any static-friendly web platform.</p>
+
+        <h3 class="text-2xl font-bold mt-8 mb-4">Recommended Hosting Providers</h3>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">1. Cloudflare Pages</h4>
+        <p class="text-gray-300 mb-4">Best for performance and global edge delivery.</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li><strong>Free tier:</strong> Excellent — unlimited sites, generous bandwidth, automatic HTTPS</li>
+            <li><strong>Deploy method:</strong> Connect GitHub, or push manually via <code>wrangler</code></li>
+            <li><strong>404 support:</strong> Uses <code>404.html</code></li>
+            <li><strong>i18n support:</strong> Subfolders fully supported</li>
+        </ul>
+        <p class="text-gray-300 mb-6">📖 <a href="https://pages.cloudflare.com/" class="text-blue-400 hover:underline">pages.cloudflare.com</a></p>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">2. Netlify</h4>
+        <p class="text-gray-300 mb-4">Fast CI, free tier, custom domains.</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li><strong>Free tier:</strong> Includes 300 build minutes/month, 100GB bandwidth</li>
+            <li><strong>Deploy method:</strong> Git push or CLI (<code>netlify deploy</code>)</li>
+            <li><strong>404 support:</strong> <code>404.html</code> required at root</li>
+            <li><strong>i18n support:</strong> No native per-locale routing, but folders work</li>
+        </ul>
+        <p class="text-gray-300 mb-6">📖 <a href="https://www.netlify.com/" class="text-blue-400 hover:underline">netlify.com</a></p>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">3. GitHub Pages</h4>
+        <p class="text-gray-300 mb-4">Great for open source docs & projects.</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li><strong>Free tier:</strong> Always free with a GitHub repo</li>
+            <li><strong>Deploy method:</strong> Push <code>dist/</code> to a <code>gh-pages</code> branch</li>
+            <li><strong>404 support:</strong> Requires root <code>404.html</code></li>
+            <li><strong>i18n support:</strong> Basic folder support only</li>
+        </ul>
+        <p class="text-gray-300 mb-6">📖 <a href="https://pages.github.com/" class="text-blue-400 hover:underline">pages.github.com</a></p>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">4. Vercel (Static mode)</h4>
+        <p class="text-gray-300 mb-4">Optimized for frontend apps.</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li><strong>Free tier:</strong> Generous — includes preview deployments and HTTPS</li>
+            <li><strong>Deploy method:</strong> GitHub or CLI (<code>vercel --prod</code>)</li>
+            <li><strong>404 support:</strong> Automatically picks up <code>404.html</code></li>
+            <li><strong>i18n support:</strong> Native locale routing if configured</li>
+        </ul>
+        <p class="text-gray-300 mb-6">📖 <a href="https://vercel.com/" class="text-blue-400 hover:underline">vercel.com</a></p>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">5. Firebase Hosting</h4>
+        <p class="text-gray-300 mb-4">Good for hobby projects, requires Google account.</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li><strong>Free tier:</strong> 1GB storage, 10GB/month transfer</li>
+            <li><strong>Deploy method:</strong> <code>firebase deploy</code></li>
+            <li><strong>404 support:</strong> Via <code>firebase.json</code> configuration</li>
+            <li><strong>i18n support:</strong> Manual folder structure only</li>
+        </ul>
+        <p class="text-gray-300 mb-6">📖 <a href="https://firebase.google.com/products/hosting" class="text-blue-400 hover:underline">firebase.google.com/products/hosting</a></p>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">6. Render</h4>
+        <p class="text-gray-300 mb-4">Simpler alternative to Netlify, works well with Rift.</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li><strong>Free tier:</strong> Static site hosting with custom domains, HTTPS</li>
+            <li><strong>Deploy method:</strong> GitHub auto-deploy or CLI</li>
+            <li><strong>404 support:</strong> Root <code>404.html</code> required</li>
+            <li><strong>i18n support:</strong> Works with folder-based locales</li>
+        </ul>
+        <p class="text-gray-300 mb-6">📖 <a href="https://render.com/" class="text-blue-400 hover:underline">render.com</a></p>
+
+        <h3 class="text-2xl font-bold mt-8 mb-4">Self-Hosting Options</h3>
+        <p class="text-gray-300 mb-6">You can also serve your Rift site from:</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li><strong>Any VPS or Linux server:</strong> using <code>nginx</code> or <code>caddy</code></li>
+            <li><strong>Docker containers:</strong> serve <code>dist/</code> using <code>nginx:alpine</code></li>
+            <li><strong>Cloud storage buckets:</strong> e.g., S3 + CloudFront</li>
+            <li><strong>IPFS:</strong> or static CDN gateways</li>
+        </ul>
+
+        <h3 class="text-2xl font-bold mt-8 mb-4">Local Testing</h3>
+        <p class="text-gray-300 mb-6">To preview your built site locally before pushing it to production, use:</p>
+        <pre class="bg-zinc-800 text-gray-300 p-4 rounded mb-6"><code class="language-bash">npx serve dist/</code></pre>
+        <p class="text-gray-300 mb-6">or:</p>
+        <pre class="bg-zinc-800 text-gray-300 p-4 rounded mb-6"><code class="language-bash">python3 -m http.server --directory dist</code></pre>
+
+        <h3 class="text-2xl font-bold mt-8 mb-4">Tips for Deployment</h3>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li>Make sure <code>404.html</code> is present at the root</li>
+            <li>Confirm your permalinks match the host's expected folder/file behavior</li>
+            <li>Don’t forget to rebuild (<code>rift build</code>) before every deployment</li>
+            <li>Use Git-based deploys for easier automation</li>
+        </ul>
+    </div>
+</section>

@@ -1,4 +1,4 @@
-import { findContent, Page, paginate } from "@riftjs/rift/common";
+import { findContent, paginate } from "@riftjs/rift/common";
 import { Context } from "@riftjs/rift/core";
 import slugify from "slugify";
 
@@ -17,22 +17,17 @@ export default class PostsController
             content: await file.content,
         })));
 
-        posts = posts.sort((a, b) => a.date > b.date ? -1 : 1);
+        posts.forEach(post =>
+        {
+            ctx.param({ post });
+        });
 
-        let featured = posts.find(post => post.featured);
-        ctx.data["featured"] = featured;
-        
-        paginate(posts, 4).forEach(page => ctx.param({ page }));
 
     }
 
-    permalink(ctx: Context, params: { page: Page<any> })
-    {
-        if (params.page.index === 0)
-        {
-            return "/blog/";
-        }
 
-        return `/blog/page/${params.page.index + 1}/`;
+    permalink(ctx: Context, params: { post: { slug: string } })
+    {
+        return `/blog/${params.post.slug}/`;
     }
 }

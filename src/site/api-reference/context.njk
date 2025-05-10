@@ -6,7 +6,57 @@ layout: layouts/api-reference.njk
 <section class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
   <div class="max-w-4xl mx-auto px-6">
     <h1 class="text-4xl font-bold mb-6">Context</h1>
-    <p class="text-gray-300 mb-6">Reference for the context object available in Rift controllers and templates.</p>
-    <!-- Add detailed content and code examples here -->
+    <p class="text-gray-300 mb-6">The `Context` object is the foundational state container that powers all page generation, controller execution, collection resolution, and rendering behavior within Rift SSG. It is the central interface that ties together project-wide data, localized configuration, collection access, and page scheduling.</p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">What is Context?</h2>
+    <p class="text-gray-300 mb-6">The `Context` object is an encapsulated representation of the current state during a build step. It is passed into every user-facing function in the Rift pipeline, including:</p>
+    <ul class="list-disc list-inside text-gray-300 mb-6">
+      <li><code>params(context)</code> in controller files</li>
+      <li><code>permalink(context)</code> in routing logic</li>
+      <li><code>collection(context)</code> in collection API loaders</li>
+      <li><code>render(context, data)</code> in the rendering stage</li>
+    </ul>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Structure and Responsibilities</h2>
+    <p class="text-gray-300 mb-6">Internally, the context object includes:</p>
+    <ul class="list-disc list-inside text-gray-300 mb-6">
+      <li>A reference to the active <strong>Project</strong></li>
+      <li>A shared <strong>Map of collections</strong> (loaded and grouped by name)</li>
+      <li>A <strong>data dictionary</strong> to store scoped shared information between calls</li>
+      <li>An optional <strong>parent context</strong>, which supports scoped child contexts</li>
+      <li>An <strong>array of parameters</strong> collected via <code>context.param(...)</code></li>
+    </ul>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Context Lifecycle</h2>
+    <p class="text-gray-300 mb-6">Understanding how context lives and mutates during different build phases is key to using it effectively.</p>
+    <h3 class="text-xl font-bold mt-6 mb-2">1. During <code>params(context)</code></h3>
+    <p class="text-gray-300 mb-6">In this phase, the context is <strong>shared</strong> and <strong>mutable</strong>. You typically use this to scan collections, derive which pages should exist, and use <code>context.param()</code> to register page variants.</p>
+
+    <h3 class="text-xl font-bold mt-6 mb-2">2. During <code>permalink(context)</code></h3>
+    <p class="text-gray-300 mb-6">For each set of parameters declared earlier, a <strong>new context</strong> is created using <code>.makeChildContext()</code>. This ensures clean page-by-page logic, and allows you to derive a URL (permalink) from that page's localized state.</p>
+
+    <h3 class="text-xl font-bold mt-6 mb-2">3. During <code>render(context, data)</code></h3>
+    <p class="text-gray-300 mb-6">At this phase, the context is <strong>read-only</strong> from the user’s perspective. It contains everything required to render the page: the params, locale, associated layout, and any project-global metadata.</p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Localization Awareness</h2>
+    <p class="text-gray-300 mb-6">One of Rift’s core features is built-in i18n, and the context object plays a central role in this. During all phases, <code>context.locale</code> tells you which locale is currently being processed — for example, <code>"en"</code> or <code>"fr"</code>.</p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Collections Access</h2>
+    <p class="text-gray-300 mb-6">The context object gives access to all declared collections via <code>context.collections</code>, which is typically a <code>Map&lt;string, Collection&gt;</code>. These are automatically loaded during the initialization step of the build.</p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Scheduling Pages</h2>
+    <p class="text-gray-300 mb-6">The most important context method during <code>params(context)</code> is:</p>
+    <ul class="list-disc list-inside text-gray-300 mb-6">
+      <li><code>context.param(paramsObject)</code> — This tells Rift: “I want to generate a page for this set of parameters.”</li>
+    </ul>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Data Sharing</h2>
+    <p class="text-gray-300 mb-6">Because context includes a mutable <code>data</code> object, you can store scoped variables inside it during <code>params()</code> execution and use them across multiple passes.</p>
+
+    <h2 class="text-2xl font-bold mt-8 mb-4">Developer Tips</h2>
+    <ul class="list-disc list-inside text-gray-300 mb-6">
+      <li>Always filter collections using <code>context.locale</code> inside controllers to avoid cross-language leaks.</li>
+      <li>Treat <code>context</code> as <strong>read-write during <code>params()</code></strong>, and <strong>read-only during <code>render()</code></strong>.</li>
+    </ul>
   </div>
 </section>

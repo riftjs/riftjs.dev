@@ -1,0 +1,90 @@
+---
+layout: layouts/docs.njk
+---
+<section id="cloudflare" class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-3xl font-extrabold mb-10 tracking-tight border-b border-zinc-800 pb-4">Deploying Rift to Cloudflare Pages</h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">Cloudflare Pages is one of the fastest and most reliable ways to deploy your Rift site. It offers edge-hosted static delivery, free HTTPS, automatic Git integration, and zero-config deployment.</p>
+
+        <h3 class="text-2xl font-bold mt-8 mb-4">Prerequisites</h3>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li>A Rift project pushed to a Git provider (GitHub, GitLab)</li>
+            <li>A working <code class="font-mono text-green-400">package.json</code> with:</li>
+            <ul class="list-disc list-inside ml-6 text-gray-300 mb-6">
+                <li><code>"build": "rift build"</code> defined in <code>scripts</code></li>
+            </ul>
+            <li>Output directory set to <code class="font-mono text-green-400">dist/</code></li>
+        </ul>
+
+        <h3 class="text-2xl font-bold mt-8 mb-4">Steps</h3>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">1. Push Your Code to GitHub</h4>
+        <p class="text-gray-300 mb-6">Make sure your Rift project is in a Git repo and pushed to GitHub (or GitLab).</p>
+        <p class="text-gray-300 mb-6">You only need the source files — <code>src/</code>, <code>package.json</code>, etc. No need to commit <code>dist/</code>.</p>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">2. Go to Cloudflare Pages</h4>
+        <p class="text-gray-300 mb-6">Visit <a href="https://pages.cloudflare.com/" class="text-blue-400 hover:underline">pages.cloudflare.com</a> and click <strong>“Create a project”</strong>. Connect your GitHub or GitLab account and choose your Rift repository.</p>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">3. Configure Build Settings</h4>
+        <p class="text-gray-300 mb-6">In the project setup:</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li><strong>Framework preset:</strong> <code>None</code></li>
+            <li><strong>Build command:</strong> <code>npm run build</code></li>
+            <li><strong>Output directory:</strong> <code>dist</code></li>
+        </ul>
+        <p class="text-gray-300 mb-6">Cloudflare will install dependencies, run your build, and deploy the static files in <code>dist/</code>.</p>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">4. Click Deploy</h4>
+        <p class="text-gray-300 mb-6">Once settings are saved, hit <strong>Deploy Site</strong>. Your site will be built and published to a <code>*.pages.dev</code> subdomain within a minute or two.</p>
+
+        <h4 class="text-xl font-bold mt-6 mb-2">5. (Optional) Add Custom Domain</h4>
+        <p class="text-gray-300 mb-6">Go to your Pages project → <strong>Settings → Custom Domains</strong>. Add your domain (e.g. <code>riftssg.com</code>) and point DNS to Cloudflare or update your registrar. Free HTTPS and auto-renewing SSL is included.</p>
+
+        <h3 class="text-2xl font-bold mt-8 mb-4">Verify</h3>
+        <p class="text-gray-300 mb-6">After deployment:</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li>Visit your site at the generated <code>.pages.dev</code> domain</li>
+            <li>Check that pages, permalinks, and <code>404.html</code> work as expected</li>
+            <li>Confirm static assets are being served correctly</li>
+        </ul>
+
+        <h3 class="text-2xl font-bold mt-8 mb-4">Continuous Deployments</h3>
+        <p class="text-gray-300 mb-6">Every time you push to your main branch, Cloudflare will rebuild and redeploy your site automatically. You can also use preview branches to test features without affecting production.</p>
+
+        <h3 class="text-2xl font-bold mt-8 mb-4">Summary</h3>
+        <table class="table-auto w-full text-left text-gray-300 mb-6">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">Setting</th>
+                    <th class="px-4 py-2">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border px-4 py-2">Framework preset</td>
+                    <td class="border px-4 py-2">None</td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2">Build command</td>
+                    <td class="border px-4 py-2"><code>npm run build</code></td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2">Output directory</td>
+                    <td class="border px-4 py-2"><code>dist</code></td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2">Default domain</td>
+                    <td class="border px-4 py-2"><code>*.pages.dev</code></td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2">Free HTTPS</td>
+                    <td class="border px-4 py-2">✅ Yes</td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2">Auto redeploys</td>
+                    <td class="border px-4 py-2">✅ Yes</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

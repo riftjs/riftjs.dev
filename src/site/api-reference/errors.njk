@@ -1,0 +1,60 @@
+---
+layout: layouts/api-reference.njk
+---
+
+<section class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto px-6">
+        <h1 class="text-4xl font-bold mb-6">Error Pages</h1>
+        <p class="text-gray-300 mb-6">Rift supports custom error page generation so that you can gracefully handle
+            broken links, missing content, or unexpected conditions in your static site. Since Rift is a static-first
+            framework, error pages are pre-rendered like any other page and served by your hosting provider in response
+            to 404 or 500-type errors.</p>
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">What is an Error Page?</h2>
+        <p class="text-gray-300 mb-6">An error page is a fallback route that is shown when no other content matches a
+            given path. The most common is a <strong>404 Not Found</strong> page, which appears when the user visits a
+            URL that doesn’t map to any controller or generated page.</p>
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">Creating a 404 Page</h2>
+        <p class="text-gray-300 mb-6">To add a basic 404 page to your site, simply create a file at:</p>
+        <pre class="bg-zinc-800 text-gray-300 p-4 rounded mb-6">src/site/404.njk</pre>
+        <p class="text-gray-300 mb-6">This file is treated like any other page — it can include frontmatter, a layout
+            reference, and even dynamic logic using Nunjucks or your templating language of choice.</p>
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">Localization Support</h2>
+        <p class="text-gray-300 mb-6">If your site uses multiple locales, you can define localized 404 pages using the
+            same i18n strategy used for content pages. For example:</p>
+        <pre class="bg-zinc-800 text-gray-300 p-4 rounded mb-6">src/site/en/404.njk
+src/site/fr/404.njk</pre>
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">Previewing Error Pages Locally</h2>
+        <p class="text-gray-300 mb-6">When running Rift in development mode, unmatched routes will serve your 404 page
+            automatically (if defined). This helps you test error UX during development. You can also directly navigate
+            to <code>/404.html</code> in your browser to preview the page.</p>
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">Hosting Considerations</h2>
+        <p class="text-gray-300 mb-6">Static hosting providers typically serve a file named <code>404.html</code> when a
+            request does not match any known file path. Rift’s job is to generate that file. Your hosting platform then
+            handles routing errors to that output.</p>
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">Rendering Logic</h2>
+        <p class="text-gray-300 mb-6">Rift does not treat error pages as special in terms of how they are built. The 404
+            page is just a page with a specific permalink (<code>404.html</code>) and optional layout or controller
+            logic. This means you can:</p>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li>Use partials, components, or Nunjucks includes</li>
+            <li>Include localized content from collections</li>
+            <li>Display fallback search or sitemap suggestions</li>
+            <li>Make it match your site’s overall design exactly</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold mt-8 mb-4">Summary</h2>
+        <ul class="list-disc list-inside text-gray-300 mb-6">
+            <li>Create <code>src/site/404.html</code> or <code>404.njk</code> to define a custom not-found page</li>
+            <li>Must use <code>permalink: 404.html</code> so your host recognizes it</li>
+            <li>Can use layouts, collections, or localization like any other page</li>
+            <li>Supports multi-locale if you're generating localized outputs</li>
+            <li>Works seamlessly with most static hosts</li>
+        </ul>
+    </div>
+</section>

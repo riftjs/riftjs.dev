@@ -3,6 +3,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rift – Static Site Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    typography: {
+                        invert: {
+                            css: {
+                                color: '#e5e7eb',
+                                a: { color: '#60a5fa' },
+                                strong: { color: '#fff' },
+                                'ul > li::before': { backgroundColor: '#4b5563' },
+                                code: { color: '#93c5fd' },
+                                blockquote: { borderLeftColor: '#4b5563' }
+                            }
+                        }
+                    }
+                }
+            },
+            plugins: [tailwindcss.typography]
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+
+
     <!-- Prism.js for syntax highlighting -->
     <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
@@ -60,6 +85,25 @@
             background: none;
             padding: 0;
             margin: 0;
+        }
+
+        pre[class*="language-"] {
+            background-color: #1e293b;
+            /* Tailwind zinc-900 */
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        code[class*="language-"] {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            color: #e2e8f0;
+            /* Tailwind slate-200 */
+            background: none;
         }
     </style>
 </head>

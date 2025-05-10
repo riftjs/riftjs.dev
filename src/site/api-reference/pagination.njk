@@ -4,9 +4,250 @@ layout: layouts/api-reference.njk
 ---
 
 <section class="bg-zinc-900 text-white py-16 border-b border-zinc-800">
-  <div class="max-w-4xl mx-auto px-6">
-    <h1 class="text-4xl font-bold mb-6">Pagination</h1>
-    <p class="text-gray-300 mb-6">How to paginate content in Rift for better navigation and UX.</p>
-    <!-- Add detailed content and code examples here -->
-  </div>
+    <div class="max-w-4xl mx-auto px-6">
+        <h1 class="text-4xl font-bold mb-6">Pagination</h1>
+
+        <p class="text-gray-300 mb-6">
+            Rift includes a built-in pagination utility that makes it easy to split large content arrays (such as blog
+            posts, articles, or product lists) into multiple pages. This feature is used directly inside controller
+            files to drive paginated output generation.
+        </p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Overview</h2>
+        <p class="text-gray-300 mb-6">
+            The <code>paginate(array, pageSize)</code> function accepts any array of items and returns an array of page
+            objects. Each page includes metadata such as the index, start offset, previous/next references, and a slice
+            of the items.
+        </p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">How It Works</h2>
+        <p class="text-gray-300 mb-6">
+            You call <code>paginate()</code> inside your controller's <code>params()</code> function to divide content
+            into multiple pages. Then, for each page, you call <code>ctx.param({ page })</code> to register it.
+        </p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Example: Paginated Blog Listing</h2>
+        <p class="text-gray-300 mb-6">
+            Here's how you can paginate a list of posts and generate separate pages with their own URLs:
+        </p>
+
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span
+                    class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Blog Controller Example</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre><code class="language-ts">export async function params(ctx) {
+  const posts = ctx.collections.posts.filter(p => p.locale === ctx.locale);
+  const pages = paginate(posts, 10);
+
+  for (const page of pages) {
+    ctx.param({ page });
+  }
+}
+
+export function permalink(ctx) {
+  const pageNum = ctx.params.page.index;
+  return pageNum === 0
+    ? `/${ctx.locale}/blog/`
+    : `/${ctx.locale}/blog/page/${pageNum + 1}`;
+}</code></pre>
+            </div>
+        </div>
+
+        <p class="text-gray-300 mb-6">
+            This example creates:
+        </p>
+        <ul class="text-gray-300 list-disc list-inside mb-6">
+            <li><code>/en/blog/</code> – the first page of posts</li>
+            <li><code>/en/blog/page/2</code>, <code>/en/blog/page/3</code>, etc. – subsequent pages</li>
+        </ul>
+
+        <p class="text-gray-300 mb-6">
+            Inside your template, you can access <code>page.items</code> to render the current chunk, and use
+            <code>page.previous</code> / <code>page.next</code> to create navigation links.
+        </p>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Usage in Templates</h2>
+        <p class="text-gray-300 mb-6">
+            In your template (e.g. blog listing), loop through <code>page.items</code> and render each item. You can
+            also conditionally render previous/next navigation using <code>page.previous</code> and
+            <code>page.next</code>.
+        </p>
+
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span
+                    class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Nunjucks Template Example</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre><code class="language-njk">&#123;% for post in page.items %&#125;
+  &lt;h2&gt;&#123;&#123; post.title &#125;&#125;&lt;/h2&gt;
+  &lt;p&gt;&#123;&#123; post.summary &#125;&#125;&lt;/p&gt;
+&#123;% endfor %&#125;
+
+&lt;nav&gt;
+  &#123;% if page.previous != null %&#125;
+    &lt;a href=&quot;/blog/page/&#123;&#123; page.previous + 1 &#125;&#125;&quot;&gt;Previous&lt;/a&gt;
+  &#123;% endif %&#125;
+  &#123;% if page.next != null %&#125;
+    &lt;a href=&quot;/blog/page/&#123;&#123; page.next + 1 &#125;&#125;&quot;&gt;Next&lt;/a&gt;
+  &#123;% endif %&#125;
+&lt;/nav&gt;</code></pre>
+            </div>
+        </div>
+
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Example: Paginate by Category</h2>
+        <p class="text-gray-300 mb-6">
+            You can also paginate blog posts for each category:
+        </p>
+
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span
+                    class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Category Pagination Controller</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre><code class="language-ts">export async function params(ctx) {
+  const posts = ctx.collections.posts.filter(p => p.locale === ctx.locale);
+  const categories = [...new Set(posts.map(p => p.category))];
+
+  for (const category of categories) {
+    const postsInCategory = posts.filter(p => p.category === category);
+    const pages = paginate(postsInCategory, 10);
+
+    for (const page of pages) {
+      ctx.param({ category, page });
+    }
+  }
+}
+
+export function permalink(ctx) {
+  const index = ctx.params.page.index;
+  const base = `/${ctx.locale}/blog/category/${ctx.params.category}`;
+  return index === 0 ? base : `${base}/page/${index + 1}`;
+}</code></pre>
+            </div>
+        </div>
+
+        <p class="text-gray-300 mb-6">
+            This will generate pages like:
+        </p>
+        <ul class="text-gray-300 list-disc list-inside mb-6">
+            <li><code>/en/blog/category/javascript</code></li>
+            <li><code>/en/blog/category/javascript/page/2</code></li>
+            <li><code>/en/blog/category/css</code></li>
+        </ul>
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Usage in Templates</h2>
+        <p class="text-gray-300 mb-6">
+            In your template (e.g. blog listing), loop through <code>page.items</code> and render each item. You can
+            also conditionally render previous/next navigation using <code>page.previous</code> and
+            <code>page.next</code>.
+        </p>
+
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span
+                    class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Nunjucks Template Example</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre><code class="language-njk">&#123;% for post in page.items %&#125;
+  &lt;h2&gt;&#123;&#123; post.title &#125;&#125;&lt;/h2&gt;
+  &lt;p&gt;&#123;&#123; post.summary &#125;&#125;&lt;/p&gt;
+&#123;% endfor %&#125;
+
+&lt;nav&gt;
+  &#123;% if page.previous != null %&#125;
+    &lt;a href=&quot;/blog/page/&#123;&#123; page.previous + 1 &#125;&#125;&quot;&gt;Previous&lt;/a&gt;
+  &#123;% endif %&#125;
+  &#123;% if page.next != null %&#125;
+    &lt;a href=&quot;/blog/page/&#123;&#123; page.next + 1 &#125;&#125;&quot;&gt;Next&lt;/a&gt;
+  &#123;% endif %&#125;
+&lt;/nav&gt;</code></pre>
+            </div>
+        </div>
+
+
+
+        <h2 class="text-2xl font-bold mt-10 mb-4">Pagination Window (Page Number Links)</h2>
+        <p class="text-gray-300 mb-6">
+            For user-friendly navigation, you can display a pagination window that shows the current page number
+            alongside nearby pages:
+        </p>
+        <p class="text-gray-300 mb-6">
+            In your controller:
+        </p>
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span
+                    class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Controller with Window</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre><code class="language-ts">const pages = paginate(posts, 10);
+
+for (let i = 0; i &lt; pages.length; i++) {
+  const page = pages[i];
+  const window = pages.slice(Math.max(i - 2, 0), i + 3);
+  ctx.param({ page, window });
+}</code></pre>
+            </div>
+        </div>
+
+        <p class="text-gray-300 mb-6">
+            In your template:
+        </p>
+        <div class="rift-ide mb-6">
+            <div class="rift-ide-header">
+                <span class="rift-ide-dot red"></span><span class="rift-ide-dot yellow"></span><span
+                    class="rift-ide-dot green"></span>
+                <span class="rift-ide-title">Windowed Pagination Template</span>
+            </div>
+            <div class="rift-ide-body">
+                <pre><code class="language-njk">&lt;nav class=&quot;pagination&quot;&gt;
+  &#123;% if page.previous != null %&#125;
+    &lt;a href=&quot;/blog/page/&#123;&#123; page.previous + 1 &#125;&#125;&quot;&gt;&laquo; Previous&lt;/a&gt;
+  &#123;% endif %&#125;
+
+  &#123;% for p in window %&#125;
+    &#123;% set pageNum = p.index + 1 %&#125;
+    &#123;% if p.index == page.index %&#125;
+      &lt;strong&gt;&#123;&#123; pageNum &#125;&#125;&lt;/strong&gt;
+    &#123;% else %&#125;
+      &lt;a href=&quot;/blog/page/&#123;&#123; pageNum &#125;&#125;&quot;&gt;&#123;&#123; pageNum &#125;&#125;&lt;/a&gt;
+    &#123;% endif %&#125;
+  &#123;% endfor %&#125;
+
+  &#123;% if page.next != null %&#125;
+    &lt;a href=&quot;/blog/page/&#123;&#123; page.next + 1 &#125;&#125;&quot;&gt;Next &raquo;&lt;/a&gt;
+  &#123;% endif %&#125;
+&lt;/nav&gt;</code></pre>
+            </div>
+        </div>
+
+        <p class="text-gray-300">
+            This displays a range like below
+        </p>
+
+        <div class="flex items-center justify-center gap-2 text-white mt-6">
+            <a href="#" class="px-3 py-1 bg-zinc-700 rounded hover:bg-zinc-600">&laquo; Previous</a>
+            <a href="#" class="px-3 py-1 bg-zinc-700 rounded hover:bg-zinc-600">1</a>
+            <a href="#" class="px-3 py-1 bg-zinc-700 rounded hover:bg-zinc-600">2</a>
+            <strong class="px-3 py-1 bg-blue-600 text-white rounded">3</strong>
+            <a href="#" class="px-3 py-1 bg-zinc-700 rounded hover:bg-zinc-600">4</a>
+            <a href="#" class="px-3 py-1 bg-zinc-700 rounded hover:bg-zinc-600">5</a>
+            <a href="#" class="px-3 py-1 bg-zinc-700 rounded hover:bg-zinc-600">Next &raquo;</a>
+        </div>
+
+
+    </div>
+
+
+
 </section>
