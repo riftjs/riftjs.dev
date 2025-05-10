@@ -6,12 +6,27 @@
         <a href="/docs#core-concepts" class="text-gray-100 hover:bg-gray-700 rounded px-2 py-2 w-full block">
             Core Concepts
         </a>
-        <a href="/docs/#installation" class="text-gray-100 hover:bg-gray-700 rounded px-2 py-2 w-full block">
+        <a href="/docs#installation" class="text-gray-100 hover:bg-gray-700 rounded px-2 py-2 w-full block">
             Installation
         </a>
-        <a href="/docs/#quick-start" class="text-gray-100 hover:bg-gray-700 rounded px-2 py-2 w-full block">
+        <a href="/docs#quick-start" class="text-gray-100 hover:bg-gray-700 rounded px-2 py-2 w-full block">
             Project Structure
         </a>
+    </div>
+
+    <hr class="my-3 border-zinc-700" />
+
+    <!-- Deployment Guides -->
+    <div class="m-4">
+        <h2 class="text-xs font-semibold mb-1 text-gray-100 uppercase tracking-wider px-2">Deployment Guides</h2>
+        <ul class="space-y-1">
+            <li><a href="/docs/hosting#hosting" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Hosting Overview</a></li>
+            <li><a href="/docs/cloudflare#cloudflare" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Cloudflare Pages</a></li>
+            <li><a href="/docs/netlify#netlify" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Netlify</a></li>
+            <li><a href="/docs/github-pages#github-pages" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">GitHub Pages</a></li>
+            <li><a href="/docs/vercel#vercel" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Vercel</a></li>
+            <li><a href="/docs/hosting#self-hosting" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Self-Hosting</a></li>
+        </ul>
     </div>
 
     <hr class="my-3 border-zinc-700" />
@@ -20,11 +35,11 @@
     <div class="m-4">
         <h2 class="text-xs font-semibold mb-1 text-gray-100 uppercase tracking-wider px-2">API Reference</h2>
         <ul class="space-y-1">
-            <li><a href="/docs/#cli-commands" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200 active:text-blue-500 active:bg-zinc-900 active:font-bold">CLI Commands</a></li>
-            <li><a href="/docs/#configuration" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200 active:text-blue-500 active:bg-zinc-900 active:font-bold">Configuration</a></li>
-            <li><a href="/docs/#pages" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200 active:text-blue-500 active:bg-zinc-900 active:font-bold">Pages</a></li>
-            <li><a href="/docs/#templating" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200 active:text-blue-500 active:bg-zinc-900 active:font-bold">Templating</a></li>
-            <li><a href="/docs/#assets" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200 active:text-blue-500 active:bg-zinc-900 active:font-bold">Assets</a></li>
+            <li><a href="/docs#cli-commands" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">CLI Commands</a></li>
+            <li><a href="/docs#configuration" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Configuration</a></li>
+            <li><a href="/docs#pages" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Pages</a></li>
+            <li><a href="/docs#templating" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Templating</a></li>
+            <li><a href="/docs#assets" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Assets</a></li>
         </ul>
     </div>
 
@@ -34,31 +49,28 @@
     <div class="m-4">
         <h2 class="text-xs font-semibold mb-1 text-gray-100 uppercase tracking-wider px-2">Plugin Reference</h2>
         <ul class="space-y-1">
-            <li><a href="/docs/#plugins" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200 active:text-blue-500 active:bg-zinc-900 active:font-bold">Static Assets</a></li>
-            <li><a href="/docs/#plugin-api" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200 active:text-blue-500 active:bg-zinc-900 active:font-bold">Plugin API</a></li>
+            <li><a href="/docs#plugins" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Static Assets</a></li>
+            <li><a href="/docs#plugin-api" class="block px-4 py-2 rounded transition hover:bg-zinc-900/50 hover:text-blue-400 text-gray-200">Plugin API</a></li>
         </ul>
     </div>
 </nav>
 <script>
 // Highlight sidebar nav link based on current hash
 (function() {
-  const links = document.querySelectorAll('nav a[href^="/docs/#"]');
+  const links = document.querySelectorAll('nav a[href^="/docs/#"], nav a[href^="/docs/"]');
   const hash = decodeURIComponent(window.location.hash);
+  const path = window.location.pathname;
   links.forEach(link => {
-    // Remove any previous highlight
     link.classList.remove('text-blue-500', 'bg-zinc-900', 'font-bold');
-    // If the link's href ends with the current hash, highlight it
-    if (hash && link.getAttribute('href').endsWith(hash)) {
+    if ((hash && link.getAttribute('href').endsWith(hash)) || link.getAttribute('href') === path + hash) {
       link.classList.add('text-blue-500', 'bg-zinc-900', 'font-bold');
     }
   });
-
-  // Listen for hash changes
   window.addEventListener('hashchange', () => {
     const newHash = decodeURIComponent(window.location.hash);
     links.forEach(link => {
       link.classList.remove('text-blue-500', 'bg-zinc-900', 'font-bold');
-      if (newHash && link.getAttribute('href').endsWith(newHash)) {
+      if ((newHash && link.getAttribute('href').endsWith(newHash)) || link.getAttribute('href') === path + newHash) {
         link.classList.add('text-blue-500', 'bg-zinc-900', 'font-bold');
       }
     });
